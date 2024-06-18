@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Pizza</title>
+    <link rel="stylesheet" type="text/css" href="main.css">
+    <script>
+        function orderPizzas() {
+            const selectedPizzas = [];
+            pizza_ordered.forEach(pizza => {
+                const pizzaItem = {
+                    "Pizza": pizza.name,
+                    "Size": pizza.large ? "Велика" : "Мала",
+                    "Orders": pizza.quantity,
+                    "Price": pizza.price * pizza.quantity
+                };
+                selectedPizzas.push(pizzaItem);
+            });
+            const pizzasParam = encodeURIComponent(JSON.stringify(selectedPizzas));
+            window.location.href = `report.html?pizzas=${pizzasParam}`;
+        }
+    </script>
+</head>
+<body>
+<div class="list">
+    <div class="header">
+        <div class="delivery-name">
+                <span>
+                    PIZZA
+                </span>
+            <span><b>
+                  KMA
+                </b></span>
+            <img src="assets/images/discount.svg" class="pizza-hat"/>
+        </div>
+        <div class="delivery-info">
+            <div class="main-info">
+            <div class="info-details">
+                <span class="phone">
+                    (044) 222 5 222
+                </span>
+                <span class="working-hours">
+                    24 години/ 7 днів на тиждень
+                </span>
+                <span class="delivery-status">
+                    Безкоштовна доставка піци
+                </span>
+            </div>
+                <button type="button" class="sign-in">
+                        Ввійти
+                </button>
+            </div>
+            <div class="pizza">
+                Піца
+            </div>
+        </div>
+    </div>
+    <div class="pizza-filters">
+        <span>
+            Усі піци<span class="pizzas-amount">8</span>
+        </span>
+        <div class="filters">
+            <span class="all chosen" onclick="filter_pizza(this)">
+                Усі
+            </span>
+            <span class="meat" onclick="filter_pizza(this)">
+                М'ясні
+            </span>
+            <span class="pineapple" onclick="filter_pizza(this)">
+                З ананасами
+            </span>
+            <span class="mushrooms" onclick="filter_pizza(this)">
+                З грибами
+            </span>
+            <span class="seafood" onclick="filter_pizza(this)">
+                З морепродуктами
+            </span>
+            <span class="vegan" onclick="filter_pizza(this)">
+                Веганські
+            </span>
+        </div>
+    </div>
+
+    <div class="discount">
+        <img src="assets/images/discount.svg" class="discount-hat">
+        <div class="advert">
+            <span>Цього тижня на все</span>
+            <label>-20%</label>
+        </div>
+    </div>
+
+</div>
+<div class="cart">
+    <div class="cart-title">
+        <span>Замовлення<span>0</span></span>
+        <label class="clear-order" onclick="clear_orders()">Очистити замовлення</label>
+    </div>
+    <div class="order-list">
+
+    </div>
+    <div class="buy-section">
+        <div class="order-sum">
+            <span>Сума замовлення</span>
+            <label class="sum">0грн</label>
+        </div>
+        <div class="order-section">
+            <button type="button" class="ordering">
+                Замовити
+            </button>
+        </div>
+    </div>
+</div>
+<script src="script.js"></script>
+</body>
+</html>
