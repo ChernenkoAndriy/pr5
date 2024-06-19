@@ -4,25 +4,9 @@
     <meta charset="UTF-8">
     <title>Pizza</title>
     <link rel="stylesheet" type="text/css" href="main.css">
-    <script>
-        function orderPizzas() {
-            const selectedPizzas = [];
-            pizza_ordered.forEach(pizza => {
-                const pizzaItem = {
-                    "Pizza": pizza.name,
-                    "Size": pizza.large ? "Велика" : "Мала",
-                    "Orders": pizza.quantity,
-                    "Price": pizza.price * pizza.quantity
-                };
-                selectedPizzas.push(pizzaItem);
-            });
-            const pizzasParam = encodeURIComponent(JSON.stringify(selectedPizzas));
-            window.location.href = `report.html?pizzas=${pizzasParam}`;
-        }
-    </script>
 </head>
 <body>
-<div class="list">
+<div class="centralpannel">
     <div class="header">
         <div class="delivery-name">
                 <span>
@@ -60,24 +44,24 @@
             Усі піци<span class="pizzas-amount">8</span>
         </span>
         <div class="filters">
-            <span class="all chosen" onclick="filter_pizza(this)">
-                Усі
-            </span>
-            <span class="meat" onclick="filter_pizza(this)">
-                М'ясні
-            </span>
-            <span class="pineapple" onclick="filter_pizza(this)">
-                З ананасами
-            </span>
-            <span class="mushrooms" onclick="filter_pizza(this)">
-                З грибами
-            </span>
-            <span class="seafood" onclick="filter_pizza(this)">
-                З морепродуктами
-            </span>
-            <span class="vegan" onclick="filter_pizza(this)">
-                Веганські
-            </span>
+                <span class="all chosen" >
+                    Усі
+                    </span>
+                    <span class="meat" >
+                    М'ясні
+                        </span>
+                        <span class="pineapple">
+                    З ананасами
+                                </span>
+                            <span class="mushrooms">
+                    З грибами
+                            </span>
+                                <span class="seafood">
+                    З морепродуктами
+                            </span>
+                                    <span class="vegan">
+                    Веганські
+                </span>
         </div>
     </div>
 
@@ -90,16 +74,15 @@
     </div>
 
 </div>
-<div class="cart">
+<div class="sidepannel">
     <div class="cart-title">
         <span>Замовлення<span>0</span></span>
-        <label class="clear-order" onclick="clear_orders()">Очистити замовлення</label>
+        <label class="clearCart">Очистити замовлення</label>
     </div>
-    <div class="order-list">
-
+    <div class="boughtlist">
     </div>
     <div class="buy-section">
-        <div class="order-sum">
+        <div class="overallsum">
             <span>Сума замовлення</span>
             <label class="sum">0грн</label>
         </div>
