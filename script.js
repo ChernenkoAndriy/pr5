@@ -170,6 +170,7 @@ var pizza_info = [
     }
 ];
 for (let pizza of pizza_info){
+    let footer = document.querySelector('.footer');
     let new_pizza = document.createElement('div');
     let pizza_type = pizza.type==="meat"?"М'ясна піца":pizza.type==="seafood"?"Піца з морепродуктами"
         :"Веганська піца";
@@ -243,7 +244,9 @@ for (let pizza of pizza_info){
         badge.classList.add("new")
         badge.innerHTML = `Нова`
         new_pizza.appendChild(badge)
-        products.appendChild(new_pizza)
+        
+        products.insertBefore(new_pizza, footer);
+
         continue
     }
     if(pizza.is_popular!==undefined){
@@ -252,14 +255,14 @@ for (let pizza of pizza_info){
         badge.innerHTML = `Популярна`
         new_pizza.appendChild(badge)
     }
-    products.appendChild(new_pizza)
+    products.insertBefore(new_pizza, footer);
+
 }
-let footer = document.createElement("footer")
-footer.classList.add("footer")
-footer.innerHTML = `<span>Pizza.22 - практичний проект в межах курсу JavaScript в Києво-Могилянській академії</span>
-        <span>Доставка піци не здійснюється</span>
-    `
-document.querySelector(".centralpannel").appendChild(footer)
+//footer.classList.add("footer")
+//footer.innerHTML = `<span>Pizza.22 - практичний проект в межах курсу JavaScript в Києво-Могилянській академії</span>
+  //      <span>Доставка піци не здійснюється</span>
+  //  `
+//document.querySelector(".centralpannel").appendChild(footer)
 document.querySelector('.pizzas-amount').textContent = pizza_info.length
 let total = document.querySelector(".sidepannel .cart-title span span")
 let total_sum = document.querySelector(".sidepannel .buy-section .sum")
