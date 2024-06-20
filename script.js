@@ -394,6 +394,59 @@ document.querySelector('.clearCart').addEventListener('click', function() {
     clear_orders();
 });
 
+function increase() {
+    let order = event.target.closest(".ordered-item");
+    let quantity = order.querySelector(".amount");
+    let nameSize = order.querySelector(".pizza-name").textContent.split(" ");
+    let name = nameSize.slice(0, -1).join(" ");
+    let size = nameSize.slice(-1)[0];
+
+    for (let pizza of pizza_ordered) {
+        if (pizza.name === name && ((pizza.large && size === "(Велика)") || (!pizza.large && size === "(Мала)"))) {
+            pizza.quantity++;
+        }
+    }
+
+    let amount = parseInt(quantity.textContent);
+    quantity.textContent = amount + 1;
+    total.textContent = parseInt(total.textContent) + 1;
+
+    order.querySelector(".minus").classList.remove('disabled');
+
+    let price = parseInt(order.querySelector(".control-panel span").textContent.slice(0, -3));
+    total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) + price) + "грн";
+
+    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered));
+}
+
+function reduce() {
+    let order = event.target.closest(".ordered-item");
+    let quantity = order.querySelector(".amount");
+    let amount = parseInt(quantity.textContent);
+    let nameSize = order.querySelector(".pizza-name").textContent.split(" ");
+    let name = nameSize.slice(0, -1).join(" ");
+    let size = nameSize.slice(-1)[0];
+
+    for (let pizza of pizza_ordered) {
+        if (pizza.name === name && ((pizza.large && size === "(Велика)") || (!pizza.large && size === "(Мала)"))) {
+            pizza.quantity--;
+            break;
+        }
+    }
+
+    quantity.textContent = amount - 1;
+    total.textContent = parseInt(total.textContent) - 1;
+
+    if (parseInt(quantity.textContent) === 1) {
+        order.querySelector(".minus").classList.add('disabled');
+    }
+
+    let price = parseInt(order.querySelector(".control-panel span").textContent.slice(0, -3));
+    total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) - price) + "грн";
+
+    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered));
+}
+
 
 
 
