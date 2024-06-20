@@ -258,11 +258,6 @@ for (let pizza of pizza_info){
     products.insertBefore(new_pizza, footer);
 
 }
-//footer.classList.add("footer")
-//footer.innerHTML = `<span>Pizza.22 - практичний проект в межах курсу JavaScript в Києво-Могилянській академії</span>
-  //      <span>Доставка піци не здійснюється</span>
-  //  `
-//document.querySelector(".centralpannel").appendChild(footer)
 document.querySelector('.pizzas-amount').textContent = pizza_info.length
 let total = document.querySelector(".sidepannel .cart-title span span")
 let total_sum = document.querySelector(".sidepannel .buy-section .sum")
@@ -449,7 +444,165 @@ function reduce() {
 
     localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered));
 }
+function remove(){
+    let order = event.target.closest(".ordered-item");
+    let quantity = order.querySelector(".amount").textContent
+    if(order.querySelector(".pizza-name").textContent.split(" ").length===2) {
+        name = order.querySelector(".pizza-name").textContent.split(" ")[0]
+        size = order.querySelector(".pizza-name").textContent.split(" ")[1]
+    }
+    if(order.querySelector(".pizza-name").textContent.split(" ").length===3){
+        name = order.querySelector(".pizza-name").textContent.split(" ")[0] + " " +
+            order.querySelector(".pizza-name").textContent.split(" ")[1]
+        size = order.querySelector(".pizza-name").textContent.split(" ")[2]
+    }
+    for(let pizza of pizza_ordered ){
+        if(pizza.name===name&&((pizza.large && size==="(Велика)")||(!pizza.large && size==="(Мала)"))){
+            pizza_ordered=pizza_ordered.filter(item => item !== pizza)
+            break;
+        }
+    }
+    let price = parseInt(order.querySelector(".control-panel span").textContent.slice(0, -3))
+    total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) - price*parseInt(quantity)) + "грн"
+    total.textContent = parseInt(total.textContent) - parseInt(quantity)
+    order.remove()
+    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered))
 
+}
+function clear_orders(){
+    let list = document.querySelector(".boughtlist")
+    list.innerHTML = ``
+    pizza_ordered = []
+    total.textContent = 0
+    total_sum.textContent = "0 грн"
+    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered))
+}
+function buy_large(){
+    let item = event.target.closest(".thumbnail")
+    let name = item.querySelector(".name").textContent.trim()
+    let large_name = name + " (Велика)"
+    let price = item.querySelector(".size-l").querySelector(".price").querySelector('b').textContent
+    for(let pizza of pizza_ordered){
+        if(pizza.name===name && pizza.large){
+           pizza.quantity++
+            for (let order of document.querySelector(".boughtlist").getElementsByClassName("ordered-item")){
+                    if(order.querySelector(".pizza-name").textContent==large_name.trim()){
+                        let quantity = order.querySelector(".amount")
+                        amount = parseInt(quantity.textContent)
+                        quantity.textContent = amount+1
+                        total.textContent = parseInt(total.textContent) + 1
+                        order.querySelector(".minus").classList.remove('disabled')
+                        total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) + parseInt(price)) + "грн"
+                        localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered))
+                        return;
+                    }
+            }
+        }
+    }
+    let weight = item.querySelector(".size-l").querySelector(".weight").querySelector('span').textContent
+    let new_order = document.createElement('div')
+    let image = item.querySelector("img").getAttribute('src')
+    new_order.classList.add("ordered-item")
+    pizza_ordered.push(new Pizza(name, true, 1, price, image, weight))
+    new_order.innerHTML = `<div class="details">
+            <span class="pizza-name">${name} (Велика)</span>
+            <div class="order-info">
+                <div class="size">
+                    <img src="assets/images/size-icon.svg"/><span>40</span>
+                </div>
+                <div class="weight">
+                    <img src="assets/images/weight.svg"/><span>${weight}</span>
+                </div>
+            </div>
+            <form class="control-panel">
+                <span>${price}грн</span>
+                <div class="amount-control">
+                    <button type="button" class="minus disabled" onclick="reduce()">
+                        -
+                    </button>
+                    <span class="amount">1</span>
+                    <button type="button" class="plus" onclick="increase()">
+                        +
+                    </button>
+                </div>
+                <button type="button" class="delete" onclick="remove()">
+                        x
+                </button>
+            </form>
+            </div>
+            <div class="order-picture">
+                <img src=${image}>
+            </div>
+        </div>
+    `
+    document.querySelector(".boughtlist").appendChild(new_order)
+    total.textContent = parseInt(total.textContent) + 1
+    total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) + parseInt(price)) + "грн"
+    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered))
+}
+function buy_small(){
+    let item = event.target.closest(".thumbnail")
+    let name = item.querySelector(".name").textContent.trim()
+    let large_name = name + " (Мала)"
+    let price = item.querySelector(".size-s").querySelector(".price").querySelector('b').textContent
+    for(let pizza of pizza_ordered){
+        if(pizza.name===name && !pizza.large){
+            pizza.quantity++
+            for (let order of document.querySelector(".boughtlist").getElementsByClassName("ordered-item")){
+                if(order.querySelector(".pizza-name").textContent==large_name.trim()){
+                    let quantity = order.querySelector(".amount")
+                    amount = parseInt(quantity.textContent)
+                    quantity.textContent = amount+1
+                    total.textContent = parseInt(total.textContent) + 1
+                    order.querySelector(".minus").classList.remove('disabled')
+                    total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) + parseInt(price)) + "грн"
+                    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered))
+                    return;
+                }
+            }
+        }
+    }
+    let weight = item.querySelector(".size-s").querySelector(".weight").querySelector('span').textContent
+    let new_order = document.createElement('div')
+    let image = item.querySelector("img").getAttribute('src')
+    pizza_ordered.push(new Pizza(name, false, 1, price, image, weight))
+    new_order.classList.add("ordered-item")
+    new_order.innerHTML = `<div class="details">
+            <span class="pizza-name">${name} (Мала)</span>
+            <div class="order-info">
+                <div class="size">
+                    <img src="assets/images/size-icon.svg"/><span>30</span>
+                </div>
+                <div class="weight">
+                    <img src="assets/images/weight.svg"/><span>${weight}</span>
+                </div>
+            </div>
+            <form class="control-panel">
+                <span>${price}грн</span>
+                <div class="amount-control">
+                    <button type="button" class="minus disabled" onclick="reduce()">
+                        -
+                    </button>
+                    <span class="amount">1</span>
+                    <button type="button" class="plus" onclick="increase()">
+                        +
+                    </button>
+                </div>
+                <button type="button" class="delete" onclick="remove()">
+                        x
+                </button>
+            </form>
+            </div>
+            <div class="order-picture">
+                <img src=${image}>
+            </div>
+        </div>
+    `
+    document.querySelector(".boughtlist").appendChild(new_order)
+    total.textContent = parseInt(total.textContent) + 1
+    total_sum.textContent = (parseInt(total_sum.textContent.split(" ")[0]) + parseInt(price)) + "грн"
+    localStorage.setItem("pizzaList", JSON.stringify(pizza_ordered))
+}
 
 
 
